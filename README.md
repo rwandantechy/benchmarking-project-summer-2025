@@ -1,24 +1,32 @@
-# Benchmarking Project Summer 2025
-# Benchmarking Project Summer 2025
+
+# Benchmarking Project — Summer 2025
 
 ## Project Overview
-[Brief description of your benchmarking project]
+
+This project aims to systematically benchmark the inference performance, resource utilization, and power consumption of selected quantized and distilled language models, as well as multimodal AI models, on embedded and edge computing platforms. The results will provide actionable insights to optimize AI deployments in constrained hardware environments, ensuring reproducibility and thorough documentation throughout the process.
 
 ## Directory Structure
+
+```
+
 benchmarking-project-summer-2025/
 ├── data/
-│ ├── raw_logs/ # Raw log files
-│ └── processed/ # Processed data
-├── docs/ # Documentation
-├── src/ # Source code
-├── .gitignore # Ignore patterns
-├── README.md # This file
-├── requirements.txt # Python dependencies
-├── Dockerfile # Container configuration
-└── docker-compose.yml # Service definitions
-
+│   ├── raw_logs/        # Unprocessed raw log files collected during benchmarking
+│   └── processed/       # Cleaned and transformed datasets prepared for analysis
+├── docs/                # Project documentation, including methodology and findings
+├── src/                 # Source code for benchmarking scripts, utilities, and analyses
+├── .gitignore           # Git ignore file specifying files to exclude from version control
+├── README.md            # This file — project overview and setup instructions
+├── requirements.txt     # Python dependencies and package versions
+├── Dockerfile           # Docker container configuration for consistent environment setup
+└── docker-compose.yml   # Docker Compose file for orchestrating multi-container services
+```
 
 ## Setup Instructions
-1. Clone this repository
-2. Install dependencies: Looking in indexes: https://pypi.org/simple, https://www.piwheels.org/simple
-3. [Add your specific setup instructions]
+
+1.  **Clone the repository**
+
+    ```bash
+    git clone git@github.com:<your-username>/benchmarking-project-summer-2025.git
+    cd benchmarking-project-summer-2025
+    ```
