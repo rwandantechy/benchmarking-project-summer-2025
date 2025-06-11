@@ -27,6 +27,6 @@ benchmarking-project-summer-2025/
 1.  **Clone the repository**
 
     ```bash
-    git clone git@github.com:<your-username>/benchmarking-project-summer-2025.git
+    git clone git@github.com:rwandantechy/benchmarking-project-summer-2025.git
     cd benchmarking-project-summer-2025
     ```
