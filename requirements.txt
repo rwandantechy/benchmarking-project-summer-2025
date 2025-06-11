@@ -1,4 +1,13 @@
-# Core requirements
+# Core dependencies
+numpy>=1.21.0
+pandas>=1.3.0
+matplotlib>=3.4.0
+psutil>=5.8.0
+tqdm>=4.0.0  # Progress bars
+
+# Development
+pytest>=6.0.0
+black>=21.0  # Code formatting# Core requirements
 numpy>=1.21.0
 pandas>=1.3.0
 matplotlib>=3.4.0
