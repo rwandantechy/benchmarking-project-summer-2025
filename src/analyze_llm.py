@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def plot_llm_results(csv_path="data/processed/llm_benchmark_results.csv", output_file="data/processed/llm_benchmark_summary.png"):
+def plot_llm_results(csv_path="data/processed/llm_benchmark_results.csv"):
     df = pd.read_csv(csv_path)
     print(f"Columns in CSV: {list(df.columns)}")
     print("Sample data:")
@@ -38,6 +38,11 @@ def plot_llm_results(csv_path="data/processed/llm_benchmark_results.csv", output
     axs[2].set_ylabel("RAM (MB)")
 
     plt.tight_layout()
+
+    # Automatically use first model name for filename
+    model_name_safe = df['model'].unique()[0].replace(':', '-')
+    output_file = f"data/processed/llm_benchmark_summary_{model_name_safe}.png"
+
     plt.savefig(output_file)
     print(f"Plot saved to {output_file}")
 
