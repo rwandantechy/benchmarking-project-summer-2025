@@ -53,8 +53,8 @@ def benchmark_model(model_name):
 def save_results(metrics, output, output_dir="data/processed"):
     os.makedirs(output_dir, exist_ok=True)
 
-    # Save or append to CSV
-    csv_file = os.path.join(output_dir, "benchmark_results.csv")
+    # Save or append to CSV for LLM benchmarks
+    csv_file = os.path.join(output_dir, "llm_benchmark_results.csv")
     file_exists = os.path.isfile(csv_file)
 
     with open(csv_file, "a", newline="") as f:
@@ -77,3 +77,4 @@ if __name__ == "__main__":
     output, metrics = benchmark_model(args.model)
     save_results(metrics, output)
     print("[✓] Done. Metrics logged and output saved.")
+
