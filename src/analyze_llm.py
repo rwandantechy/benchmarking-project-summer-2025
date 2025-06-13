@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def plot_llm_results(csv_path="data/processed/benchmark_results.csv", output_file="data/processed/llm_benchmark_summary.png"):
+def plot_llm_results(csv_path="data/processed/llm_benchmark_results.csv", output_file="data/processed/llm_benchmark_summary.png"):
     df = pd.read_csv(csv_path)
     print(f"Columns in CSV: {list(df.columns)}")
     print("Sample data:")
@@ -19,17 +19,20 @@ def plot_llm_results(csv_path="data/processed/benchmark_results.csv", output_fil
 
     fig, axs = plt.subplots(3, 1, figsize=(10, 12))
 
-    sns.barplot(data=df, x='model', y='response_time_sec', ax=axs[0], palette="Blues")
+    # Response time
+    sns.barplot(data=df, x='model', y='response_time_sec', hue='model', ax=axs[0], palette="Blues", legend=False)
     axs[0].set_title("LLM Response Time (seconds)")
     axs[0].set_xlabel("Model")
     axs[0].set_ylabel("Response Time (s)")
 
-    sns.barplot(data=df, x='model', y='cpu_percent_used', ax=axs[1], palette="Oranges")
+    # CPU usage
+    sns.barplot(data=df, x='model', y='cpu_percent_used', hue='model', ax=axs[1], palette="Oranges", legend=False)
     axs[1].set_title("CPU Usage (%)")
     axs[1].set_xlabel("Model")
     axs[1].set_ylabel("CPU Usage (%)")
 
-    sns.barplot(data=df, x='model', y='ram_used_mb', ax=axs[2], palette="Greens")
+    # RAM used
+    sns.barplot(data=df, x='model', y='ram_used_mb', hue='model', ax=axs[2], palette="Greens", legend=False)
     axs[2].set_title("RAM Used (MB)")
     axs[2].set_xlabel("Model")
     axs[2].set_ylabel("RAM (MB)")
