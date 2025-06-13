@@ -65,7 +65,7 @@ def save_results(metrics, output, output_dir="data/processed"):
         writer.writerow(metrics)
 
     # Save output text
-    output_txt = os.path.join(output_dir, f"{metrics['model'].replace(':', '-')}_output.txt")
+    output_txt = os.path.join(output_dir, f"{metrics['model'].replace(':', '-')}_output.md")
     with open(output_txt, "w") as f:
         f.write(output)
 
