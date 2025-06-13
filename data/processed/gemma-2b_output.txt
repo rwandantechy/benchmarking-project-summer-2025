@@ -1,0 +1,25 @@
+Sure. Here's the difference between supervised and unsupervised machine learning:
+
+**Supervised Learning:**
+
+* In supervised learning, you provide the model with labeled data consisting of pairs of input-output data points.
+* The model learns to map the input data to the output data through a learning algorithm.
+* The model is then evaluated on a separate test set to assess its performance.
+* In supervised learning, the model is provided with labeled data. This allows the model to learn the relationships between the features and the target variable.
+* Examples of supervised learning include:
+  - Image classification (e.g., training a neural network to classify images of cats and dogs)
+  - Natural language processing (e.g., training a language model to understand the meaning of text)
+  - Medical diagnosis (e.g., training a model to diagnose diseases based on patient symptoms)
+
+**Unsupervised Learning:**
+
+* In unsupervised learning, you provide the model with unlabeled data, which contains no information about the target variable.
+* The model learns to find patterns and relationships in the data through unsupervised learning algorithms.
+* The model is evaluated on a separate test set to assess its performance.
+* In unsupervised learning, the model is provided with unlabeled data. This allows the model to discover the hidden patterns and relationships in the data.
+* Examples of unsupervised learning include:
+  - Clustering (e.g., grouping customers based on their purchase history)
+  - Anomaly detection (e.g., identifying unusual or suspicious data points)
+  - Market segmentation (e.g., identifying different customer segments for targeted marketing campaigns)
+
+In summary, supervised learning requires labeled data, where the input and output variables are known. Unsupervised learning, on the other hand, requires unlabeled data, where the model must discover patterns and relationships on its own.
