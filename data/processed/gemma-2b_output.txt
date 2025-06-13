@@ -1,0 +1,27 @@
+**Supervised Machine Learning**
+
+* **Goal:** Learn a mapping between input and output data.
+* **Training Data:** Data with labeled features (input and output values).
+* **Supervised Learner:** A model that learns from the labeled training data.
+* **Types of Learners:**
+    * Linear regression
+    * Support vector machines (SVM)
+    * Decision trees
+* **Output:** A model that can be used to make predictions or classifications on new data.
+
+**Unsupervised Machine Learning**
+
+* **Goal:** Discover patterns and relationships in data without prior labels.
+* **Training Data:** Data with no labeled features.
+* **Unsupervised Learner:** A model that learns from the relationships and patterns in the data.
+* **Types of Learners:**
+    * K-means clustering
+    * Hierarchical clustering
+    * Self-organizing maps
+* **Output:** A model that can be used to identify clusters, outliers, or other meaningful patterns in data.
+
+**Example:**
+
+**Supervised Learning:** Training a linear regression model on a dataset of sales data. The model learns to map the input (customer attributes) to the output (total sales amount).
+
+**Unsupervised Learning:** Clustering a collection of customer profiles based on their purchase history and demographics. The model discovers hidden groups of customers with similar characteristics.
