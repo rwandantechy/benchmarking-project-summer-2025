@@ -14,4 +14,3 @@ matplotlib>=3.4.0
 
 # Benchmarking-specific
 psutil>=5.8.0
-timeit
