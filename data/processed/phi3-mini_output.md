@@ -1,9 +1,0 @@
-Supervised Learning: In Supervised Machine Learning, algorithms are trained using labeled data to predict a label for new/unseen inputs based on past observations or examples (a process known as training). The aim is to find patterns that can generalize from the input-output pairs and make accurate predictions about unseen instances.
-
-A common example of Supervised Learning could be image classification where an algorithm learns how to recognize different types of objects in images based on labeled data sets (e.g., identifying whether a person, car or cat is present). The model would learn from examples with pre-assigned labels and then predict the label for new instances it hasn't seen before
-
-Unsupervised Learning: Unsupervised Machine Learning algorithms are not provided any prior labeled data; instead, they explore large amounts of raw input to identify patterns or relationships within them. The goal is usually clustering similar instances together based on their inherent features (e.g., grouping customers by purchasing habits) without explicit labeling done beforehand
-
-A common example of Unsupervised Learning could be customer segmentation, where the objective would not involve any labeled data but rather detect natural groupings or clusters in transactional datasets to identify similar buying patterns among different groups. The model will then discover these segments on its own without explicit supervision from a human labeler
-
-Thus while Supervised Learning requires pre-labeled training examples and learns how to predict labels for new inputs, Unsupervised learning can explore large amounts of unstructured data to identify inherent patterns or structures in the dataset.
