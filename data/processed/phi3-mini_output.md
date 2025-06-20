@@ -1,0 +1,7 @@
+Supervised Machine Learning (ML) is a type of ML where models are trained using labeled data with predefined outcomes to predict new outputs based on previously observed patterns in the given input-output pairs. In contrast, Unsupervised Machine Learning does not require labels and instead finds hidden structure within unlabeled data by clustering or associating similar items together without prior knowledge of outcome variables being modeled.
+
+For example: Imagine a scenario where we have to categorize various types of fruits based on their features such as color, size, texture etc., into different groups (clusters). In this case, Unsupervised ML would be suitable for grouping similar fruit data together and identifying patterns in the dataset.
+
+On the other hand, an example where Supervised ML can come in handy is a spam detection system using email messages as input features like words used or frequency of occurrence of particular keywords etc., to determine if a message falls under 'spam' or not (labelled output). In this case, we have predefined labels i.e., non-spam and spam that our model will learn from previous examples of emails with these outcomes assigned by human experts during the training phase.
+
+Therefore, supervised learning is best suited for prediction tasks where a labeled dataset can be used to train models while unsupervised machine learning algorithms are more suitable when there's no predefined label and we want our model to find inherent structures or patterns in data on its own without prior knowledge of outcomes.
