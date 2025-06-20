@@ -1,0 +1,11 @@
+Supervised and Unsupervised Machine Learning are two core approaches used in training algorithms to learn patterns from data with different objectives:
+
+1. Supervised Learning: This approach involves using labeled input-output pairs (training examples) where the output is known for every example, as it has been provided by a human expert or other means of supervision. The goal here is predicting unseen outputs based on learned patterns from these inputs and their corresponding labels/targets. In essence, we are teaching an algorithm to replicate specific outcomes with similar input data in the future.
+
+Example: A common application for Supervised Learning would be a spam detection system where emails can either be classified as "spam" or not ("ham"). The machine learning model learns from numerous examples of labeled (marked) and unlabeled (unmarked) data, identifying specific features in the email that indicate whether it'them to be categorized as spam.
+
+2. Unsupervised Learning: This approach involves using input-output pairs where neither is provided or known beforehand; therefore we don't have explicit targets/labels for our output values and aiming towards discovering inherent patterns, similarities, correlations etc in the data itself without any external guidance. It primarily focuses on clustering - grouping together data points that are closely related to each other based upon their features or characteristics (similarity), rather than predict specific outcomes as with Supervised Learning methods.
+
+Example: An example of Unsupervised learning would be customer segmentation for a business, whereby the goal is identifying clusters in customers who behave similarly but have different buying patterns - thus allowing targeted marketing to each unique group based on their respective behaviors and interests identified by this method. 
+
+Thus, Supervised Learning uses labeled data with known output values (targets) for learning while Unsupervised seeks inherent relationships in the input-data itself without any explicit knowledge of outputs or targets priorly provided to it during its training process.
