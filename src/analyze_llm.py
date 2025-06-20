@@ -15,8 +15,8 @@ def plot_latest_model(csv_path="data/processed/llm_benchmark_results.csv"):
     latest_entry = df.iloc[-1]
     model_name = latest_entry['model']
 
-    # Filter only that model’s rows in case it has multiple entries
-    model_df = df[df['model'] == model_name]
+    # Use only the latest entry to avoid stacking
+    model_df = pd.DataFrame([latest_entry])
 
     sns.set(style="whitegrid")
     fig, axs = plt.subplots(3, 1, figsize=(10, 12))
@@ -37,8 +37,8 @@ def plot_latest_model(csv_path="data/processed/llm_benchmark_results.csv"):
     axs[2].set_ylabel("RAM (MB)")
 
     for ax in axs:
-        ax.set_xlabel(model_name)
-        ax.set_xticklabels(ax.get_xticklabels(), rotation=0)
+        ax.set_xlabel("")
+        ax.set_xticklabels([model_name], rotation=0)
 
     plt.tight_layout()
 
