@@ -76,7 +76,7 @@ def benchmark_model(model_name):
         "model": model_name,
         "response_time_sec": round(end_time - start_time, 2),
         "cpu_percent_used": round(average_cpu, 2),
-        "ram_used_mb": round(mem_after - mem_before, 2)
+        "ram_used_mb": round(mem_after, 2)
     }
 
     return output, metrics
