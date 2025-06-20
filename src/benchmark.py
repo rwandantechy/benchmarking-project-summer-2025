@@ -6,6 +6,7 @@ import os
 import json
 import argparse
 import psutil
+import threading
 from datetime import datetime
 
 PROMPT = "Explain the main differences between supervised and unsupervised machine learning, and provide an example of each."
@@ -46,23 +47,35 @@ def get_docker_mem_usage(container_name="ollama"):
 def benchmark_model(model_name):
     mem_before = get_docker_mem_usage("ollama")
 
-    # Sample CPU before running inference
-    cpu_usage_before = psutil.cpu_percent(interval=0.1)
+    # === Start CPU sampling thread ===
+    cpu_samples = []
+    stop_sampling = False
 
+    def sample_cpu():
+        while not stop_sampling:
+            cpu_samples.append(psutil.cpu_percent(interval=0.1))
+
+    sampling_thread = threading.Thread(target=sample_cpu)
+    sampling_thread.start()
+
+    # === Run inference ===
     start_time = time.time()
     output = run_inference(model_name)
     end_time = time.time()
 
-    # Sample CPU again after inference (over 1 second interval)
-    cpu_usage_after = psutil.cpu_percent(interval=1.0)
+    # === Stop CPU sampling ===
+    stop_sampling = True
+    sampling_thread.join()
 
     mem_after = get_docker_mem_usage("ollama")
+
+    average_cpu = sum(cpu_samples) / len(cpu_samples) if cpu_samples else 0.0
 
     metrics = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "model": model_name,
         "response_time_sec": round(end_time - start_time, 2),
-        "cpu_percent_used": round(cpu_usage_after, 2),
+        "cpu_percent_used": round(average_cpu, 2),
         "ram_used_mb": round(mem_after - mem_before, 2)
     }
 
@@ -92,4 +105,3 @@ if __name__ == "__main__":
     output, metrics = benchmark_model(args.model)
     save_results(metrics, output)
     print("[✓] Done. Metrics logged and output saved.")
-
