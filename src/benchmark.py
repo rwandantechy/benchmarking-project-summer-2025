@@ -29,50 +29,44 @@ def run_inference(model_name):
 
     return collected
 
-def get_docker_stats(container_name="ollama"):
-    """Returns RAM (MB) and CPU (%) usage of a Docker container."""
+def get_docker_mem_usage(container_name="ollama"):
+    """Return memory usage (MB) of a Docker container."""
     try:
         result = subprocess.check_output(
             ["docker", "stats", container_name, "--no-stream", "--format", "{{json .}}"]
         )
         stats = json.loads(result.decode())
-
-        # Parse memory
-        mem_usage_raw = stats["MemUsage"].split('/')[0].strip()
-        if "MiB" in mem_usage_raw:
-            mem_mb = float(mem_usage_raw.replace("MiB", "").strip())
-        elif "GiB" in mem_usage_raw:
-            mem_mb = float(mem_usage_raw.replace("GiB", "").strip()) * 1024
+        mem_usage = stats["MemUsage"].split('/')[0].strip()  # e.g., "88.77MiB"
+        if "MiB" in mem_usage:
+            return float(mem_usage.replace("MiB", "").strip())
+        elif "GiB" in mem_usage:
+            return float(mem_usage.replace("GiB", "").strip()) * 1024
         else:
-            mem_mb = 0.0
-
-        # Parse CPU
-        cpu_str = stats["CPUPerc"].replace("%", "").strip()
-        cpu_percent = float(cpu_str)
-
-        return mem_mb, cpu_percent
+            return 0.0
     except Exception as e:
-        print(f"[!] Failed to get Docker stats: {e}")
-        return 0.0, 0.0
+        print(f"[!] Failed to get Docker memory usage: {e}")
+        return 0.0
 
 def benchmark_model(model_name):
     start_time = time.time()
-    mem_before, cpu_before = get_docker_stats()
+    mem_before = get_docker_mem_usage("ollama")
 
     output = run_inference(model_name)
 
-    mem_after, cpu_after = get_docker_stats()
+    mem_after = get_docker_mem_usage("ollama")
     end_time = time.time()
 
-    ram_used = max(0.0, round(mem_after - mem_before, 2))
-    cpu_used = max(0.0, round(cpu_after - cpu_before, 2))
+    # Calculate the change in RAM, ensuring it's not negative
+    # If mem_after < mem_before, it means memory was released or fluctuated down,
+    # in which case the "additional usage" for the inference is considered 0.
+    ram_delta = mem_after - mem_before
+    effective_ram_used = max(0.0, round(ram_delta, 2)) # Ensure non-negative
 
     metrics = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "model": model_name,
         "response_time_sec": round(end_time - start_time, 2),
-        "cpu_percent_used": cpu_used,
-        "ram_used_mb": ram_used
+        "ram_used_mb": effective_ram_used
     }
 
     return output, metrics
@@ -80,7 +74,7 @@ def benchmark_model(model_name):
 def save_results(metrics, output, output_dir="data/processed"):
     os.makedirs(output_dir, exist_ok=True)
 
-    # Save or append to CSV
+    # Save or append to CSV for LLM benchmarks
     csv_file = os.path.join(output_dir, "llm_benchmark_results.csv")
     file_exists = os.path.isfile(csv_file)
 
@@ -90,7 +84,7 @@ def save_results(metrics, output, output_dir="data/processed"):
             writer.writeheader()
         writer.writerow(metrics)
 
-    # Save model output
+    # Save output text
     output_txt = os.path.join(output_dir, f"{metrics['model'].replace(':', '-')}_output.md")
     with open(output_txt, "w") as f:
         f.write(output)
@@ -104,4 +98,3 @@ if __name__ == "__main__":
     output, metrics = benchmark_model(args.model)
     save_results(metrics, output)
     print("[✓] Done. Metrics logged and output saved.")
-
