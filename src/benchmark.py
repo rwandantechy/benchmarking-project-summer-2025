@@ -1,7 +1,6 @@
 import requests
 import time
 import psutil
-import requests
 import csv
 import os
 import json
@@ -18,7 +17,7 @@ def run_inference(model_name):
         "prompt": PROMPT,
         "stream": True
     }, stream=True)
-
+    
     collected = ""
     for line in response.iter_lines():
         if line:
@@ -33,12 +32,14 @@ def run_inference(model_name):
 def benchmark_model(model_name):
     start_time = time.time()
     cpu_before = psutil.cpu_percent(interval=None)
-    mem_before = psutil.virtual_memory().used
+    
+    process = psutil.Process(os.getpid())
+    mem_before = process.memory_info().rss  # in bytes
 
     output = run_inference(model_name)
 
     cpu_after = psutil.cpu_percent(interval=None)
-    mem_after = psutil.virtual_memory().used
+    mem_after = process.memory_info().rss
     end_time = time.time()
 
     metrics = {
@@ -46,8 +47,8 @@ def benchmark_model(model_name):
         "model": model_name,
         "response_time_sec": round(end_time - start_time, 2),
         "cpu_percent_used": round(cpu_after - cpu_before, 2),
-        "ram_used_mb": round(abs(mem_after - mem_before) / (1024 * 1024), 2)
- }
+        "ram_used_mb": round((mem_after - mem_before) / (1024 * 1024), 2)
+    }
 
     return output, metrics
 
@@ -69,7 +70,7 @@ def save_results(metrics, output, output_dir="data/processed"):
     with open(output_txt, "w") as f:
         f.write(output)
 
-if __name__ == "__main__":
+if __name__ == "__main__":  
     parser = argparse.ArgumentParser(description="Run benchmark for a specific Ollama model.")
     parser.add_argument("model", help="Model name, e.g., gemma:2b")
     args = parser.parse_args()
