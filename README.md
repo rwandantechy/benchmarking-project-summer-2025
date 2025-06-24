@@ -44,12 +44,22 @@ benchmarking-project-summer-2025/
    ```bash
    pip install -r requirements.txt
    ```
-3. **Run a benchmark**
+3. **Run a model benchmark**
    ```bash
    python benchmark.py --model <model_name>
-   # or for system benchmarks
+   ```
+4. **Run system analysis**
+   ```bash
    python src/main.py --iterations 5 --output data/processed/results.csv
    ```
+   - This benchmarks your system's CPU, memory, and disk for the specified number of iterations.
+   - Results are saved to `data/processed/results.csv`.
+
+5. **Visualize system benchmark results**
+   ```bash
+   python src/analyze_system.py
+   ```
+   - This generates plots in `data/processed/plots/` summarizing system performance.
 
 ## Documentation
 - Detailed methodology, system configuration, and code documentation are available in the `docs/` folder.

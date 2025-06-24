@@ -18,6 +18,23 @@ To run the full system benchmark suite:
 python src/main.py --iterations 5 --output data/processed/results.csv
 ```
 
+## System Analysis
+
+System analysis benchmarks your hardware (CPU, memory, disk) to provide context for LLM/model performance.
+
+### How to Run
+```bash
+python src/main.py --iterations 5 --output data/processed/results.csv
+```
+- Runs a suite of system benchmarks for the specified number of iterations.
+- Results are saved to `data/processed/results.csv`.
+
+### Visualize System Results
+```bash
+python src/analyze_system.py
+```
+- Generates plots in `data/processed/plots/` summarizing system performance over time.
+
 ## Output Files
 - `data/processed/llm_benchmark_results.csv`: Tabular results of all LLM benchmarks.
 - `data/processed/<model>_output.md`: Raw output from each model for qualitative review.
