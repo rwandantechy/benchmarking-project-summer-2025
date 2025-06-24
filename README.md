@@ -1,4 +1,3 @@
-
 # Benchmarking Project — Summer 2025
 
 ## Project Overview
@@ -30,3 +29,9 @@ benchmarking-project-summer-2025/
     git clone git@github.com:rwandantechy/benchmarking-project-summer-2025.git
     cd benchmarking-project-summer-2025
     ```
+
+## Conclusion
+
+For a detailed summary and analysis of the benchmarking results, please refer to the full report:
+
+[AI Language Model Benchmarking on Resource-Constrained Devices: A Performance Analysis (PDF)](Conclusion/AI%20Language%20Model%20Benchmarking%20on%20Resource-Constrained%20Devices_%20A%20Performance%20Analysis.pdf)
