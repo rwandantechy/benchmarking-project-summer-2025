@@ -46,4 +46,30 @@ python src/analyze_system.py
 - **Plots**: PNG files visualize performance metrics for each model.
 - **Logs**: Check `benchmark.log` for errors, warnings, and execution flow.
 
+## Managing Models in Dockerized Ollama
+
+### Adding a Model
+To pull (download) a model into the Ollama container:
+
+```bash
+docker exec -it ollama ollama pull <model_name>
+```
+**Example:**
+```bash
+docker exec -it ollama ollama pull phi3:mini
+```
+This pulls the model into the running Docker container named `ollama`, making it available for inference.
+
+### Removing a Model
+To remove a model from the Ollama container:
+
+```bash
+docker exec -it ollama ollama rm <model_name>
+```
+**Example:**
+```bash
+docker exec -it ollama ollama rm phi3:mini
+```
+This deletes the model from disk inside the container, freeing up space and ensuring a clean environment before benchmarking another model.
+
 ---
