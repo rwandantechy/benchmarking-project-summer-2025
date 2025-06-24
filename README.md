@@ -1,5 +1,20 @@
 # Benchmarking Project — Summer 2025
 
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/rwandantechy/benchmarking-project-summer-2025/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](requirements.txt)
+
+---
+
+## Table of Contents
+- [Project Overview](#project-overview)
+- [Directory Structure](#directory-structure)
+- [Getting Started](#getting-started)
+- [Documentation](#documentation)
+- [Conclusion](#conclusion)
+
+---
+
 ## Project Overview
 
 This project systematically benchmarks the inference performance, resource utilization, and power consumption of quantized, distilled, and multimodal language models on embedded and edge computing platforms. The results provide actionable insights for optimizing AI deployments in constrained hardware environments, with a focus on reproducibility and thorough documentation.
