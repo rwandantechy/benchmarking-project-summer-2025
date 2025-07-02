@@ -4,6 +4,7 @@ accuracy_benchmark.py
 
 Benchmarks language models on a standardized set of quadratic equations
 to measure both resource consumption and objective correctness.
+Also saves a per-model markdown with answers.
 """
 
 import argparse
@@ -81,12 +82,12 @@ def check_correctness(answer, expected_roots):
     return False
 
 
-def save_results(
+def save_results_csv(
     csv_path, timestamp, question_id, model_name, answer,
     correct, inference_time, avg_cpu, ram_used
 ):
     """
-    Append the results of a single question benchmark to the CSV.
+    Append results to the CSV.
     """
     file_exists = os.path.isfile(csv_path)
     with open(csv_path, "a", newline="") as f:
@@ -108,6 +109,17 @@ def save_results(
         ])
 
 
+def save_results_md(md_path, question_id, prompt, answer, correct):
+    """
+    Append the result to a markdown summary for the model.
+    """
+    with open(md_path, "a") as f:
+        f.write(f"## {question_id}\n")
+        f.write(f"**Prompt:**\n\n```\n{prompt}\n```\n\n")
+        f.write(f"**Model Answer:**\n\n```\n{answer.strip()}\n```\n\n")
+        f.write(f"**Correct:** {correct}\n\n---\n")
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Accuracy benchmark for quadratic math questions."
@@ -119,9 +131,14 @@ def main():
     model_name = args.model
 
     questions_path = "data_v2/questions/math_questions.json"
-    results_path = "data_v2/processed/llm_accuracy_results.csv"
+    results_csv_path = "data_v2/processed/llm_accuracy_results.csv"
+    results_md_path = f"data_v2/processed/{model_name.replace(':', '-')}_accuracy_output.md"
 
     questions = load_questions(questions_path)
+
+    # clear out the markdown if re-running
+    if os.path.exists(results_md_path):
+        os.remove(results_md_path)
 
     for q in questions:
         prompt = q["prompt"]
@@ -137,9 +154,13 @@ def main():
 
         timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        save_results(
-            results_path, timestamp, question_id, model_name, answer,
+        save_results_csv(
+            results_csv_path, timestamp, question_id, model_name, answer,
             correct, inference_time, avg_cpu, ram_used
+        )
+
+        save_results_md(
+            results_md_path, question_id, prompt, answer, correct
         )
 
         print(
@@ -147,9 +168,8 @@ def main():
             f"{round(inference_time,2)}s | CPU={round(avg_cpu,2)}% | RAM={round(ram_used,2)}MB"
         )
 
-    print(" All questions completed.")
+    print("All questions completed.")
 
 
 if __name__ == "__main__":
     main()
-
