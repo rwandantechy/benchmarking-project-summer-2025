@@ -1,4 +1,4 @@
-# Benchmarking Project — Summer 2025
+# Benchmarking Project — Summer 2025 (v2)
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/rwandantechy/benchmarking-project-summer-2025/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -14,6 +14,7 @@
   - [Accuracy-Focused Benchmarking (v2)](#accuracy-focused-benchmarking-v2)
 - [Quadratic Equation Benchmark Questions](#quadratic-equation-benchmark-questions)
 - [Getting Started](#getting-started)
+- [Running and Analyzing the Accuracy Benchmark](#running-and-analyzing-the-accuracy-benchmark)
 - [Managing Models in Dockerized Ollama](#managing-models-in-dockerized-ollama)
 - [Documentation](#documentation)
 - [Conclusion](#conclusion)
@@ -77,8 +78,24 @@ This project benchmarks the inference performance, resource utilization, and acc
    ```bash
    python src_v2/accuracy_benchmark.py <model_name>
    ```
-   - Uses questions from `data_v2/questions/math_questions.json`
-   - Results saved to `data_v2/processed/accuracy_benchmark_results.csv`
+   - Reads math questions from `data_v2/questions/math_questions.json`
+   - Records results to `data_v2/processed/llm_accuracy_results.csv`
+
+## Running and Analyzing the Accuracy Benchmark
+
+### 1️⃣ Run the accuracy benchmark
+```bash
+python src_v2/accuracy_benchmark.py <model_name>
+```
+- Reads math questions from `data_v2/questions/math_questions.json`
+- Records results to `data_v2/processed/llm_accuracy_results.csv`
+
+### 2️⃣ Analyze results and generate accuracy summary plot
+```bash
+python src_v2/analyze_accuracy.py
+```
+- Produces `data_v2/processed/llm_accuracy_summary.png`
+- This plot shows the proportion of correct answers per model, allowing you to visually compare model accuracy on the math questions.
 
 ## Managing Models in Dockerized Ollama
 
@@ -100,3 +117,6 @@ docker exec -it ollama ollama rm <model_name>
 For a comprehensive summary and analysis of the benchmarking results, please refer to the full report:
 
 [Benchmarking Report (PDF)](Conclusion/Benchmarking_Report.pdf)
+
+---
+

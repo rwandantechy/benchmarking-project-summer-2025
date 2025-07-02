@@ -20,6 +20,5 @@ Thank you for considering contributing! We welcome pull requests, bug reports, a
 
 ## Community
 - Be respectful and inclusive.
-- See the [Code of Conduct](CODE_OF_CONDUCT.md) (if available).
 
 --- 
