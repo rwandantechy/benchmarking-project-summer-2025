@@ -13,8 +13,8 @@ import csv
 import os
 import requests
 import time
-import psutil
 import threading
+import subprocess
 from datetime import datetime
 
 
@@ -30,21 +30,50 @@ def measure_cpu_usage(stop_event, cpu_samples):
     """
     Thread function to sample CPU usage while the model runs.
     """
+    import psutil
     while not stop_event.is_set():
         cpu_samples.append(psutil.cpu_percent(interval=0.1))
+
+
+def get_docker_stats(container_name="ollama"):
+    """
+    Get Docker container RAM (MB) and CPU (%) stats.
+    """
+    try:
+        result = subprocess.check_output([
+            "docker", "stats", container_name, "--no-stream", "--format", "{{json .}}"
+        ])
+        stats = json.loads(result.decode())
+
+        # Parse memory
+        mem_usage_raw = stats["MemUsage"].split('/')[0].strip()
+        if "MiB" in mem_usage_raw:
+            mem_mb = float(mem_usage_raw.replace("MiB", "").strip())
+        elif "GiB" in mem_usage_raw:
+            mem_mb = float(mem_usage_raw.replace("GiB", "").strip()) * 1024
+        else:
+            mem_mb = 0.0
+
+        # Parse CPU percent
+        cpu_str = stats["CPUPerc"].replace("%", "").strip()
+        cpu_percent = float(cpu_str)
+
+        return mem_mb, cpu_percent
+    except Exception as e:
+        print(f"[!] Could not get Docker stats: {e}")
+        return 0.0, 0.0
 
 
 def benchmark_question(model_name, prompt):
     """
     Send a question to the Ollama model and measure resource/time metrics.
-    Returns the model answer, inference time, average CPU usage, and RAM used.
     """
     cpu_samples = []
     stop_event = threading.Event()
     thread = threading.Thread(target=measure_cpu_usage, args=(stop_event, cpu_samples))
     thread.start()
 
-    mem_before = psutil.virtual_memory().used / (1024 * 1024)
+    mem_before, _ = get_docker_stats()
     start_time = time.time()
 
     try:
@@ -64,8 +93,8 @@ def benchmark_question(model_name, prompt):
     stop_event.set()
     thread.join()
 
-    mem_after = psutil.virtual_memory().used / (1024 * 1024)
-    ram_used = mem_after - mem_before
+    mem_after, _ = get_docker_stats()
+    ram_used = max(0.0, round(mem_after - mem_before, 2))  # positive delta only
     avg_cpu = sum(cpu_samples) / len(cpu_samples) if cpu_samples else 0
     inference_time = end_time - start_time
 
@@ -87,7 +116,7 @@ def save_results_csv(
     correct, inference_time, avg_cpu, ram_used
 ):
     """
-    Append results to the CSV.
+    Append results to CSV.
     """
     file_exists = os.path.isfile(csv_path)
     with open(csv_path, "a", newline="") as f:
@@ -111,7 +140,7 @@ def save_results_csv(
 
 def save_results_md(md_path, question_id, prompt, answer, correct):
     """
-    Append the result to a markdown summary for the model.
+    Save a question/answer block to markdown.
     """
     with open(md_path, "a") as f:
         f.write(f"## {question_id}\n")
@@ -136,7 +165,7 @@ def main():
 
     questions = load_questions(questions_path)
 
-    # clear out the markdown if re-running
+    # Clear markdown if re-running
     if os.path.exists(results_md_path):
         os.remove(results_md_path)
 
