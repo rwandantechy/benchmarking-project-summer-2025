@@ -2,7 +2,7 @@
 """
 analyze_accuracy_dashboard_refined.py
 
-Creates an  visualization dashboard for language model benchmarks:
+Creates an advanced visualization dashboard for language model benchmarks:
 - Response time (with color gradient and min/max annotation)
 - CPU usage (horizontal bar chart)
 - RAM usage (with outlier highlight)
@@ -18,18 +18,40 @@ import argparse
 import os
 
 def load_results(csv_path):
+    """
+    Load the CSV results into a DataFrame.
+    """
     if not os.path.exists(csv_path):
         raise FileNotFoundError(f"{csv_path} not found.")
     return pd.read_csv(csv_path)
 
 def plot_dashboard(df, model_name, output_path):
+    """
+    Generate the multi-metric visualization dashboard.
+    """
     sns.set_theme(style="whitegrid")
+
     model_df = df[df["model"] == model_name]
+
+    # Defensive guard for missing data
+    if model_df.empty:
+        print(f"[!] No data found for model {model_name} in CSV.")
+        return
+
+    if model_df["correct"].isnull().all():
+        print(f"[!] Model {model_name} has no correctness results; skipping dashboard.")
+        return
+
     questions = model_df["question_id"].astype(str)
     response_times = model_df["response_time_sec"]
     cpu_usages = model_df["cpu_percent_used"]
     ram_usages = model_df["ram_used_mb"]
     correctness = model_df["correct"].map({True: "Correct", False: "Incorrect"})
+
+    # Defensive mismatch check
+    if len(correctness) != len(questions):
+        print("[!] Mismatch between correctness and questions — dashboard skipped.")
+        return
 
     # Summary statistics
     avg_time = response_times.mean()
@@ -40,22 +62,26 @@ def plot_dashboard(df, model_name, output_path):
     fig, axs = plt.subplots(2, 2, figsize=(18, 13))
     plt.subplots_adjust(top=0.85, hspace=0.35, wspace=0.25)
 
-    # Response time with color gradient and min/max annotation
+    # Response time with color gradient
     colors = sns.color_palette("Blues", len(response_times))
-    bars = axs[0,0].bar(questions, response_times, color=colors)
+    axs[0,0].bar(questions, response_times, color=colors)
     axs[0,0].set_title("Response Time per Question")
     axs[0,0].set_ylabel("Time (s)")
     for i, v in enumerate(response_times):
         axs[0,0].text(i, v + 1, f"{v:.1f}s", ha="center", fontsize=11)
-    max_idx = response_times.idxmax()
-    min_idx = response_times.idxmin()
-    axs[0,0].annotate('Max', (questions.iloc[max_idx], response_times.iloc[max_idx]),
-                      textcoords="offset points", xytext=(0,10), ha='center', color='red', weight='bold')
-    axs[0,0].annotate('Min', (questions.iloc[min_idx], response_times.iloc[min_idx]),
-                      textcoords="offset points", xytext=(0,10), ha='center', color='green', weight='bold')
 
-    # CPU usage with horizontal bars
-    bars = axs[0,1].barh(questions, cpu_usages, color=sns.color_palette("Oranges", len(cpu_usages)))
+    try:
+        max_idx = response_times.idxmax()
+        min_idx = response_times.idxmin()
+        axs[0,0].annotate('Max', (questions.iloc[max_idx], response_times.iloc[max_idx]),
+                          textcoords="offset points", xytext=(0,10), ha='center', color='red', weight='bold')
+        axs[0,0].annotate('Min', (questions.iloc[min_idx], response_times.iloc[min_idx]),
+                          textcoords="offset points", xytext=(0,10), ha='center', color='green', weight='bold')
+    except Exception:
+        pass  # handle missing values gracefully
+
+    # CPU usage horizontal bars
+    axs[0,1].barh(questions, cpu_usages, color=sns.color_palette("Oranges", len(cpu_usages)))
     axs[0,1].set_title("CPU Usage per Question")
     axs[0,1].set_xlabel("CPU (%)")
     for i, v in enumerate(cpu_usages):
@@ -63,15 +89,17 @@ def plot_dashboard(df, model_name, output_path):
     axs[0,1].set_yticklabels(questions)
 
     # RAM usage with outlier highlight
-    bars = axs[1,0].bar(questions, ram_usages, color=sns.color_palette("Greens", len(ram_usages)))
+    axs[1,0].bar(questions, ram_usages, color=sns.color_palette("Greens", len(ram_usages)))
     axs[1,0].set_title("RAM Usage per Question")
     axs[1,0].set_ylabel("RAM (MB)")
     for i, v in enumerate(ram_usages):
-        axs[1,0].text(i, v + 5, f"{v:.1f} MB", ha="center", fontsize=11)
+        display_val = f"{v:.1f} MB" if v > 0.5 else "~0 MB"
+        axs[1,0].text(i, v + 5, display_val, ha="center", fontsize=11)
     outlier_idx = np.where(ram_usages == max_ram)[0]
     for idx in outlier_idx:
         axs[1,0].bar(questions.iloc[idx], ram_usages.iloc[idx], color='red', alpha=0.5)
-        axs[1,0].annotate('Peak', (idx, ram_usages.iloc[idx]), textcoords="offset points", xytext=(0,10), ha='center', color='red', weight='bold')
+        axs[1,0].annotate('Peak', (idx, ram_usages.iloc[idx]),
+                          textcoords="offset points", xytext=(0,10), ha='center', color='red', weight='bold')
 
     # Correctness with icons
     for i, val in enumerate(correctness):
@@ -94,14 +122,15 @@ def plot_dashboard(df, model_name, output_path):
                     f"Peak CPU: {max_cpu:.1f}%\n"
                     f"Peak RAM: {max_ram:.1f} MB")
     fig.text(0.5, 0.93, f" Accuracy Dashboard for {model_name}", fontsize=18, fontweight="bold", ha='center')
-    fig.text(0.99, 0.01, summary_text, fontsize=13, ha='right', va='bottom', bbox=dict(facecolor='lightgrey', alpha=0.5, boxstyle='round,pad=0.5'))
+    fig.text(0.99, 0.01, summary_text, fontsize=13, ha='right', va='bottom',
+             bbox=dict(facecolor='lightgrey', alpha=0.5, boxstyle='round,pad=0.5'))
 
     plt.savefig(output_path)
     plt.close()
     print(f"[✓] Saved dashboard to {output_path}")
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate  accuracy dashboard.")
+    parser = argparse.ArgumentParser(description="Generate advanced accuracy dashboard.")
     parser.add_argument("model", help="The model name in CSV (e.g. phi3:mini)")
     args = parser.parse_args()
 
