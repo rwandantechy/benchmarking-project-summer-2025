@@ -5,7 +5,7 @@
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](requirements.txt)
 
 ---
-
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/rwandantechy/benchmarking-project-summer-2025)
 ## Table of Contents
 - [Project Overview](#project-overview)
 - [Directory Structure](#directory-structure)
