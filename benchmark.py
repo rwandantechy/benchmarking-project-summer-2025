@@ -103,5 +103,5 @@ if __name__ == "__main__":
     print(f"Running benchmark for {args.model}...")
     output, metrics = benchmark_model(args.model)
     save_results(metrics, output)
-    print("[✓] Done. Metrics logged and output saved.")
+    print("[Yes] Done. Metrics logged and output saved.")
 
