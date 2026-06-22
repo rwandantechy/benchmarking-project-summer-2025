@@ -193,7 +193,7 @@ def main():
         )
 
         print(
-            f"[✓] {question_id} | correct={correct} | "
+            f"[Yes] {question_id} | correct={correct} | "
             f"{round(inference_time,2)}s | CPU={round(avg_cpu,2)}% | RAM={round(ram_used,2)}MB"
         )
 
